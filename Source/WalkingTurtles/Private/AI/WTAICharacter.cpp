@@ -1,0 +1,29 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "AI/WTAICharacter.h"
+
+// Sets default values
+AWTAICharacter::AWTAICharacter()
+{
+    // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    PrimaryActorTick.bCanEverTick = true;
+}
+
+// Called when the game starts or when spawned
+void AWTAICharacter::BeginPlay()
+{
+    Super::BeginPlay();
+}
+
+// Called every frame
+void AWTAICharacter::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+}
+
+// Called to bind functionality to input
+void AWTAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+    Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
