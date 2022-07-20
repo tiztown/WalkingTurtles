@@ -4,8 +4,9 @@
 #include "Misc/WTButton.h"
 
 #include "Components/BoxComponent.h"
-#include "Components/SphereComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 AWTButton::AWTButton()
@@ -16,11 +17,11 @@ AWTButton::AWTButton()
     MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("BaseMeshComponent");
     RootComponent = MeshComp;
 
+    TextComponent = CreateDefaultSubobject<UTextRenderComponent>("TextComponent");
+    TextComponent->SetupAttachment(MeshComp);
+
     ButtonMeshComp = CreateDefaultSubobject<UStaticMeshComponent>("ButtonMeshComponent");
     ButtonMeshComp->SetupAttachment(GetRootComponent());
-
-    SphereComp = CreateDefaultSubobject<USphereComponent>("ButtonCollisionComponent");
-    SphereComp->SetupAttachment(ButtonMeshComp);
 
     BoxComp = CreateDefaultSubobject<UBoxComponent>("BaseCollisionComponent");
     BoxComp->SetupAttachment(GetRootComponent());
@@ -28,19 +29,14 @@ AWTButton::AWTButton()
 
 void AWTButton::Interact()
 {
-    UGameplayStatics::PlaySoundAtLocation(this, PressSound, ButtonMeshComp->GetComponentLocation());
+    UGameplayStatics::PlaySound2D(this, PressSound);
 
     OnInteract.Broadcast();
 }
+
 
 // Called when the game starts or when spawned
 void AWTButton::BeginPlay()
 {
     Super::BeginPlay();
-}
-
-// Called every frame
-void AWTButton::Tick(float DeltaTime)
-{
-    Super::Tick(DeltaTime);
 }

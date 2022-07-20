@@ -3,6 +3,8 @@
 
 #include "Player/WTPlayerCharacter.h"
 
+#include "DrawDebugHelpers.h"
+#include "WTButton.h"
 #include "Camera/CameraComponent.h"
 
 // Sets default values
@@ -39,6 +41,7 @@ void AWTPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
     PlayerInputComponent->BindAxis("MoveForward", this, &AWTPlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AWTPlayerCharacter::MoveRight);
     PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AWTPlayerCharacter::Interact);
+    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AWTPlayerCharacter::Jump);
 }
 
 void AWTPlayerCharacter::MoveForward(float Value)
@@ -55,4 +58,27 @@ void AWTPlayerCharacter::MoveRight(float Value)
 
 void AWTPlayerCharacter::Interact()
 {
+    if (!GetWorld() || !GetController()) return;
+
+    FHitResult Hit;
+    FVector StartPoint;
+    FRotator Direction;
+    GetController()->GetPlayerViewPoint(StartPoint, Direction);
+    FVector EndPoint = StartPoint + Direction.Vector() * 1000.0f;
+
+    // FCollisionQueryParams CollisionQueryParams;
+    // CollisionQueryParams.AddIgnoredActor(this);
+
+    GetWorld()->LineTraceSingleByChannel(Hit, StartPoint, EndPoint, ECC_Visibility);
+
+    // DrawDebugSphere(GetWorld(), Hit.Location, 30, 12, FColor::Red, false, 2);
+
+    if (Hit.bBlockingHit)
+    {
+        // UE_LOG(LogTemp, Warning, TEXT("Hitted actor = %s"), *Hit.GetActor()->GetName());
+        if (AWTButton* Button = Cast<AWTButton>(Hit.Actor))
+        {
+            Button->Interact();
+        }
+    }
 }

@@ -3,16 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TextRenderComponent.h"
 #include "GameFramework/Actor.h"
 #include "WTButton.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInteractSignature)
+class USoundCue;
+class UTextRenderComponent;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInteractSignature);
 
 
 class UNiagaraSystem;
 class UBoxComponent;
-class USphereComponent;
 UCLASS()
 class WALKINGTURTLES_API AWTButton : public AActor
 {
@@ -26,12 +28,12 @@ public:
 
     FOnInteractSignature OnInteract;
 
+    // Set text in TextComponent from given number
+    void SetNumber(int32 Number) const { TextComponent->SetText(FText::AsNumber(Number)); }
+
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
-
-    UPROPERTY(VisibleAnywhere)
-    USphereComponent* SphereComp;
 
     UPROPERTY(VisibleAnywhere)
     UStaticMeshComponent* MeshComp;
@@ -42,6 +44,9 @@ protected:
     UPROPERTY(VisibleAnywhere)
     UBoxComponent* BoxComp;
 
+    UPROPERTY(VisibleAnywhere)
+    UTextRenderComponent* TextComponent;
+
     UPROPERTY(EditAnywhere, Category = "FX")
-    USoundBase* PressSound;
+    USoundCue* PressSound;
 };

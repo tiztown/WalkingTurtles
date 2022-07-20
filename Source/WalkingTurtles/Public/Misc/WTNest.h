@@ -6,12 +6,18 @@
 #include "GameFramework/Actor.h"
 #include "WTNest.generated.h"
 
+class UNiagaraSystem;
+class UArrowComponent;
+class USoundCue;
+class UBehaviorTree;
+class UTextRenderComponent;
 class AWTAICharacter;
 class AWTButton;
-class UNiagaraEmitter;
-class USphereComponent;
 class UBoxComponent;
-UCLASS()
+
+
+UCLASS(HideCategories = ("Variable", "Transform", "Sockets", "Shape", "Navigation", "ComponentTick", "Physics", "Tags", "Cooking", "HLOD",
+        "Mobile", "Activation", "Component Replication", "Events", "Asset User Data", "Collision", "Rendering", "Input", "Actor", "LOD"))
 class WALKINGTURTLES_API AWTNest : public AActor
 {
     GENERATED_BODY()
@@ -23,38 +29,45 @@ public:
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
-    
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", meta = (ClampMin = 0))
+    int32 NestNumber = 0;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
     AWTButton* AssignedButton;
 
-    TSubclassOf<AWTAICharacter> TurtleClass; 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+    TSubclassOf<AWTAICharacter> TurtleClass;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+    UBehaviorTree* BehaviorTreeToUse;
 
     UPROPERTY(VisibleAnywhere)
-    USceneComponent* RootComponent;
+    USceneComponent* BaseComponent;
 
     UPROPERTY(VisibleAnywhere)
     UStaticMeshComponent* BaseMeshComponent;
 
     UPROPERTY(VisibleAnywhere)
-    USceneComponent* TurtleSpawnPoint;
+    UTextRenderComponent* BaseMeshTextComponent;
+
+    UPROPERTY(VisibleAnywhere)
+    UArrowComponent* TurtleSpawnArrow;
 
     UPROPERTY(VisibleAnywhere)
     UBoxComponent* BoxCollisionComp;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+    AActor* DestinationActor;
+
     UPROPERTY(VisibleAnywhere)
-    USphereComponent* DestroySphereComponent;
+    UTextRenderComponent* FinishTextComponent;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
-    USoundBase* SpawnSound;
+    USoundCue* SpawnSound;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
-    USoundBase* DestroySound;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
-    UNiagaraEmitter* SpawnNiagaraEmitter;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
-    UNiagaraEmitter* DestroyNiagaraEmitter;
+    UNiagaraSystem* SpawnVFX;
 
 private:
     UFUNCTION()
