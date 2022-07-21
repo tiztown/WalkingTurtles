@@ -31,6 +31,8 @@ void AWTAICharacter::GetDestinations(FVector& StartLocation, FVector& EndLocatio
 
 void AWTAICharacter::DestinationReached()
 {
+    UE_LOG(LogTemp, Warning, TEXT("TestReached"));
+
     const AAIController* AIController = GetController<AAIController>();
     if (AIController)
     {
