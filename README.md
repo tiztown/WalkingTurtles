@@ -1,5 +1,7 @@
 # WalkingTurtles
 
+Made in two evenings. 8-12 hours.
+
 Task1
 =====
 In root You can find RestructString.cpp and RestructString.exe:
